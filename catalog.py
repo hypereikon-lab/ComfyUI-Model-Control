@@ -24,6 +24,9 @@ class ModelArtifact:
 COMFY_H3_REVISION = "4cc1d817b6184899b41293954329f576cb5ae86b"
 PDD_REVISION = "f4cac997f880e93cf6940af61ee8d58ef31ff7f3"
 FUN_CONTROL_REVISION = "6419c27ece80f330826ae4439fa9c5910c475ccf"
+SAM3_REVISION = "f38cd62b71494b53ac2b56ca36e24f3c8d565581"
+DA3_REVISION = "248c0c2c1fca3cf3046db1d0d3d5256f2d078f41"
+SDPOSE_REVISION = "f122ac7976997885e3bfeab2bb3a537a6bc250bc"
 
 
 def _hf(repo: str, revision: str, path: str) -> str:
@@ -152,6 +155,66 @@ CATALOG = {
             6_806_843_904,
             "919a48acb525dc8fc70287fcd94ec1f5e5e289a77f1df14d01099c6ce204eb02",
             FUN_CONTROL_REVISION,
+        ),
+        ModelArtifact(
+            "perception.sam3.1.multiplex-fp16",
+            "sam3",
+            "tracked-mask-model",
+            "checkpoints",
+            "sam3.1_multiplex_fp16.safetensors",
+            _hf(
+                "Comfy-Org/sam3.1",
+                SAM3_REVISION,
+                "checkpoints/sam3.1_multiplex_fp16.safetensors",
+            ),
+            1_745_546_848,
+            "9ba99c92703c2e8b4f47de2d34a539bb8e18923049e238b780d70dbe6368eb03",
+            SAM3_REVISION,
+        ),
+        ModelArtifact(
+            "perception.da3.mono-large",
+            "depth-anything-3",
+            "depth-control-model",
+            "geometry_estimation",
+            "depth_anything_3_mono_large.safetensors",
+            _hf(
+                "Comfy-Org/Depth-Anything-3",
+                DA3_REVISION,
+                "geometry_estimation/depth_anything_3_mono_large.safetensors",
+            ),
+            1_336_748_056,
+            "9b44eda5bedba5b4e125686fdb79d1db309c1b9785277576eb930f885b008f96",
+            DA3_REVISION,
+        ),
+        ModelArtifact(
+            "perception.sdpose.wholebody-fp16",
+            "sdpose",
+            "pose-control-model",
+            "checkpoints",
+            "sdpose_wholebody_fp16.safetensors",
+            _hf(
+                "Comfy-Org/SDPose",
+                SDPOSE_REVISION,
+                "checkpoints/sdpose_wholebody_fp16.safetensors",
+            ),
+            1_916_645_792,
+            "63d01f9a7494560693b24767f4469d59c9d3266b31ff0a253e74d1e611442721",
+            SDPOSE_REVISION,
+        ),
+        ModelArtifact(
+            "perception.sdpose.detector-fp16",
+            "sdpose",
+            "pose-detector-model",
+            "diffusion_models",
+            "rt_detr_v4-x-hgnet_fp16.safetensors",
+            _hf(
+                "Comfy-Org/SDPose",
+                SDPOSE_REVISION,
+                "diffusion_models/rt_detr_v4-x-hgnet_fp16.safetensors",
+            ),
+            123_968_978,
+            "581f9af9bbabb664d1891cbccd823308b176ecd409146f954dfa39af3bec2476",
+            SDPOSE_REVISION,
         ),
         ModelArtifact(
             "h3.fl2va.trunk.fp8-scaled-legacy",
