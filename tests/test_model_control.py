@@ -121,6 +121,50 @@ class ModelControlTests(unittest.TestCase):
             with self.assertRaisesRegex(ModelControlError, "confirmation"):
                 control.start_download(self.artifact.artifact_id, self.artifact.sha256, "yes")
 
+    def test_catalog_and_remove_cover_every_configured_root(self):
+        secondary = self.root / "secondary"
+        secondary.mkdir()
+        target = secondary / self.artifact.filename
+        target.write_bytes(self.payload)
+        control = ModelControl(
+            {"diffusion_models": (self.root, secondary)},
+            opener=lambda *_args, **_kwargs: FakeResponse(self.payload),
+            reserve_bytes=0,
+        )
+        with patch.dict("model_control.CATALOG", {self.artifact.artifact_id: self.artifact}, clear=True):
+            state = control.catalog()["artifacts"][0]
+            task = control.start_remove(
+                self.artifact.artifact_id,
+                self.artifact.sha256,
+                f"remove:{self.artifact.artifact_id}",
+            )
+            result = self.wait(control, task["task_id"])
+        self.assertTrue(state["installed"])
+        self.assertEqual(state["installed_copies"], 1)
+        self.assertEqual(result["status"], "success")
+        self.assertFalse(target.exists())
+
+    def test_remove_validates_all_copies_before_deleting_any(self):
+        secondary = self.root / "secondary"
+        secondary.mkdir()
+        primary_target = self.root / self.artifact.filename
+        secondary_target = secondary / self.artifact.filename
+        primary_target.write_bytes(self.payload)
+        secondary_target.write_bytes(b"same-size-wrong-bytes")
+        control = ModelControl(
+            {"diffusion_models": (self.root, secondary)}, reserve_bytes=0
+        )
+        with patch.dict("model_control.CATALOG", {self.artifact.artifact_id: self.artifact}, clear=True):
+            task = control.start_remove(
+                self.artifact.artifact_id,
+                self.artifact.sha256,
+                f"remove:{self.artifact.artifact_id}",
+            )
+            result = self.wait(control, task["task_id"])
+        self.assertEqual(result["status"], "error")
+        self.assertTrue(primary_target.exists())
+        self.assertTrue(secondary_target.exists())
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -10,7 +10,7 @@ import urllib.request
 import uuid
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Callable
+from typing import Callable, Iterable
 
 try:
     from .catalog import CATALOG, ModelArtifact
@@ -39,18 +39,24 @@ class TaskState:
 
 
 class ModelControl:
-    VERSION = "1.0.0"
+    VERSION = "1.1.0"
     RESERVE_BYTES = 10 * 1024**3
     CHUNK_BYTES = 8 * 1024**2
 
     def __init__(
         self,
-        folder_roots: dict[str, Path],
+        folder_roots: dict[str, Path | Iterable[Path]],
         *,
         opener: Callable = urllib.request.urlopen,
         reserve_bytes: int | None = None,
     ):
-        self.folder_roots = {name: Path(path).resolve() for name, path in folder_roots.items()}
+        self.folder_roots: dict[str, tuple[Path, ...]] = {}
+        for name, paths in folder_roots.items():
+            values = (paths,) if isinstance(paths, (str, os.PathLike)) else tuple(paths)
+            resolved = tuple(dict.fromkeys(Path(path).resolve() for path in values))
+            if not resolved:
+                raise ModelControlError(f"folder category {name!r} has no roots")
+            self.folder_roots[name] = resolved
         self.opener = opener
         self.reserve_bytes = self.RESERVE_BYTES if reserve_bytes is None else reserve_bytes
         self._lock = threading.RLock()
@@ -62,12 +68,12 @@ class ModelControl:
         import folder_paths
 
         categories = {item.folder_category for item in CATALOG.values()}
-        roots: dict[str, Path] = {}
+        roots: dict[str, tuple[Path, ...]] = {}
         for category in categories:
             paths = folder_paths.get_folder_paths(category)
             if not paths:
                 raise ModelControlError(f"ComfyUI has no folder for {category!r}")
-            roots[category] = Path(paths[0])
+            roots[category] = tuple(Path(path) for path in paths)
         return cls(roots)
 
     def capabilities(self) -> dict:
@@ -163,12 +169,20 @@ class ModelControl:
                     self._active_task_id = None
 
     def _download(self, task: TaskState, artifact: ModelArtifact) -> None:
-        target = self._target(artifact)
+        targets = self._targets(artifact)
+        if any(target.exists() for target in targets):
+            raise ModelControlError("final target already exists")
+        partials = [
+            target.with_name(target.name + ".part")
+            for target in targets
+            if target.with_name(target.name + ".part").exists()
+        ]
+        if len(partials) > 1:
+            raise ModelControlError("multiple partial targets exist across ComfyUI model roots")
+        target = partials[0].with_name(artifact.filename) if partials else targets[0]
         target.parent.mkdir(parents=True, exist_ok=True)
         partial = target.with_name(target.name + ".part")
         receipt = target.with_name(target.name + ".model-control.json")
-        if target.exists():
-            raise ModelControlError("final target already exists")
         offset = partial.stat().st_size if partial.exists() else 0
         if offset > artifact.size_bytes:
             raise ModelControlError("partial file exceeds expected size")
@@ -219,46 +233,61 @@ class ModelControl:
         self._write_receipt(receipt, artifact)
 
     def _remove(self, task: TaskState, artifact: ModelArtifact) -> None:
-        target = self._target(artifact)
-        if not target.exists():
+        targets = [target for target in self._targets(artifact) if target.exists()]
+        if not targets:
             raise ModelControlError("target does not exist")
-        if target.is_symlink() or not target.is_file():
-            raise ModelControlError("target is not a regular file")
-        if target.stat().st_size != artifact.size_bytes:
-            raise ModelControlError("target size does not match allowlist")
-        self._update(task, status="verifying", bytes_done=artifact.size_bytes)
-        digest = self._sha256(target)
-        if digest != artifact.sha256:
-            raise ModelControlError(f"sha256 mismatch: got {digest}")
-        target.unlink()
-        receipt = target.with_name(target.name + ".model-control.json")
-        if receipt.exists() and not receipt.is_symlink():
-            receipt.unlink()
+        for target in targets:
+            if target.is_symlink() or not target.is_file():
+                raise ModelControlError("target is not a regular file")
+            if target.stat().st_size != artifact.size_bytes:
+                raise ModelControlError("target size does not match allowlist")
+        self._update(task, status="verifying", bytes_total=artifact.size_bytes * len(targets))
+        for index, target in enumerate(targets, start=1):
+            digest = self._sha256(target)
+            if digest != artifact.sha256:
+                raise ModelControlError(f"sha256 mismatch: got {digest}")
+            self._update(task, bytes_done=artifact.size_bytes * index)
+        # Validation completes for every copy before any destructive mutation.
+        for target in targets:
+            target.unlink()
+            receipt = target.with_name(target.name + ".model-control.json")
+            if receipt.exists() and not receipt.is_symlink():
+                receipt.unlink()
 
     def _artifact_state(self, artifact: ModelArtifact) -> dict:
-        target = self._target(artifact)
-        partial = target.with_name(target.name + ".part")
+        targets = self._targets(artifact)
+        installed = [target for target in targets if target.exists()]
+        partials = [target.with_name(target.name + ".part") for target in targets]
         state = artifact.public_dict()
         state.update(
             {
-                "installed": target.exists(),
-                "installed_size_bytes": target.stat().st_size if target.exists() else None,
-                "partial_size_bytes": partial.stat().st_size if partial.exists() else 0,
-                "size_matches": target.exists() and target.stat().st_size == artifact.size_bytes,
+                "installed": bool(installed),
+                "installed_copies": len(installed),
+                "installed_size_bytes": sum(target.stat().st_size for target in installed)
+                if installed
+                else None,
+                "partial_size_bytes": sum(
+                    partial.stat().st_size for partial in partials if partial.exists()
+                ),
+                "size_matches": bool(installed)
+                and all(target.stat().st_size == artifact.size_bytes for target in installed),
             }
         )
         return state
 
-    def _target(self, artifact: ModelArtifact) -> Path:
-        root = self.folder_roots.get(artifact.folder_category)
-        if root is None:
+    def _targets(self, artifact: ModelArtifact) -> tuple[Path, ...]:
+        roots = self.folder_roots.get(artifact.folder_category)
+        if roots is None:
             raise ModelControlError(f"folder category {artifact.folder_category!r} is unavailable")
-        target = (root / artifact.filename).resolve()
-        if target.parent != root:
-            raise ModelControlError("target escapes its ComfyUI model folder")
-        if target.is_symlink():
-            raise ModelControlError("symlink targets are refused")
-        return target
+        targets = []
+        for root in roots:
+            target = (root / artifact.filename).resolve()
+            if target.parent != root:
+                raise ModelControlError("target escapes its ComfyUI model folder")
+            if target.is_symlink():
+                raise ModelControlError("symlink targets are refused")
+            targets.append(target)
+        return tuple(targets)
 
     def _update(self, task: TaskState, **changes) -> None:
         with self._lock:

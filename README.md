@@ -20,7 +20,10 @@ Every accepted artifact is compiled into `catalog.py` with:
 
 Downloads are single-flight, resumable, written to `*.part`, verified, and
 atomically finalized. Removal hashes the existing file and refuses any digest
-mismatch. Ten GiB of reserve space is kept by default.
+mismatch. Every ComfyUI root registered for the artifact's folder category is
+reconciled: downloads refuse pre-existing copies anywhere, while retirement
+validates every copy before deleting any of them. Ten GiB of reserve space is
+kept by default.
 
 ## HTTP contract
 
