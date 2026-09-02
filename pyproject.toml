@@ -1,0 +1,9 @@
+[project]
+name = "comfyui-model-control"
+version = "1.0.0"
+description = "Allowlist-only model lifecycle control for remote ComfyUI"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+
+[tool.ruff]
+line-length = 100
