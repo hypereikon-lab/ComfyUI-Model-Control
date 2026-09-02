@@ -1,9 +1,8 @@
 [project]
 name = "comfyui-model-control"
-version = "1.0.0"
-description = "Allowlist-only model lifecycle control for remote ComfyUI"
+version = "1.1.0"
+description = "Allowlist-only model lifecycle control for remote ComfyUI runtimes"
 requires-python = ">=3.10"
-license = { text = "MIT" }
 
-[tool.ruff]
-line-length = 100
+[tool.setuptools]
+py-modules = ["catalog", "model_control"]
