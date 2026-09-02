@@ -23,7 +23,7 @@ class ModelArtifact:
 
 COMFY_H3_REVISION = "4cc1d817b6184899b41293954329f576cb5ae86b"
 PDD_REVISION = "f4cac997f880e93cf6940af61ee8d58ef31ff7f3"
-FUN_CONTROL_REVISION = "6419c27ece80f330826ae4439fa9c5910c475ccf"
+FUN_CONTROL_REVISION = "c79bdb788d0f77460c3952a4c1ae3b3b7d71a4c8"
 SAM3_REVISION = "f38cd62b71494b53ac2b56ca36e24f3c8d565581"
 DA3_REVISION = "248c0c2c1fca3cf3046db1d0d3d5256f2d078f41"
 SDPOSE_REVISION = "f122ac7976997885e3bfeab2bb3a537a6bc250bc"
@@ -146,14 +146,14 @@ CATALOG = {
             "h3-control",
             "model-patch",
             "model_patches",
-            "MiniMax-H3-Fun-Controlnet-Union.safetensors",
+            "minimax_h3_fun_controlnet_union_pruned_int8_convrot.safetensors",
             _hf(
-                "alibaba-pai/MiniMax-H3-Fun-Controlnet-Union",
+                "Kijai/MiniMax-H3-experimental",
                 FUN_CONTROL_REVISION,
-                "MiniMax-H3-Fun-Controlnet-Union.safetensors",
+                "controlnet/minimax_h3_fun_controlnet_union_pruned_int8_convrot.safetensors",
             ),
-            6_806_843_904,
-            "919a48acb525dc8fc70287fcd94ec1f5e5e289a77f1df14d01099c6ce204eb02",
+            2_296_635_360,
+            "9c645c0a308c8af361efd43b409710f6f8fec0db297c29503e141a84991fed0c",
             FUN_CONTROL_REVISION,
         ),
         ModelArtifact(

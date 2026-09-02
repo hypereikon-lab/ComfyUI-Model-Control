@@ -39,7 +39,7 @@ class TaskState:
 
 
 class ModelControl:
-    VERSION = "1.1.0"
+    VERSION = "1.1.1"
     RESERVE_BYTES = 10 * 1024**3
     CHUNK_BYTES = 8 * 1024**2
 

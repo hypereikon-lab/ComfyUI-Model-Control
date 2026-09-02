@@ -1,6 +1,6 @@
 [project]
 name = "comfyui-model-control"
-version = "1.1.0"
+version = "1.1.1"
 description = "Allowlist-only model lifecycle control for remote ComfyUI runtimes"
 requires-python = ">=3.10"
 

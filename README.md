@@ -57,3 +57,10 @@ Model Control does not restart ComfyUI or unload models. Install the extension
 through the normal public-repository path, restart ComfyUI once, then operate
 its bounded API. Loader inventory should be refreshed after each completed
 download and before a graph is submitted.
+
+## MiniMax H3 Fun Control compatibility
+
+The allowlisted H3 Fun Control artifact is the pruned curve-form
+`int8_convrot` conversion for pruned H3 trunks. The original Alibaba full-width
+AdaLN checkpoint is deliberately excluded: current ComfyUI model-patch loading
+does not recognize that layout for the pruned trunks used by this runtime.

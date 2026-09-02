@@ -7,7 +7,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from catalog import ModelArtifact
+from catalog import CATALOG, ModelArtifact
 from model_control import ModelControl, ModelControlError
 
 
@@ -164,6 +164,19 @@ class ModelControlTests(unittest.TestCase):
         self.assertEqual(result["status"], "error")
         self.assertTrue(primary_target.exists())
         self.assertTrue(secondary_target.exists())
+
+    def test_h3_fun_control_targets_pruned_curve_form_checkpoint(self):
+        artifact = CATALOG["h3.fun-control.union"]
+        self.assertEqual(
+            artifact.filename,
+            "minimax_h3_fun_controlnet_union_pruned_int8_convrot.safetensors",
+        )
+        self.assertEqual(artifact.folder_category, "model_patches")
+        self.assertEqual(artifact.size_bytes, 2_296_635_360)
+        self.assertEqual(
+            artifact.sha256,
+            "9c645c0a308c8af361efd43b409710f6f8fec0db297c29503e141a84991fed0c",
+        )
 
 
 if __name__ == "__main__":
