@@ -30,6 +30,7 @@ SDPOSE_REVISION = "f122ac7976997885e3bfeab2bb3a537a6bc250bc"
 REF_TURBO8_REVISION = "0eebcc7e79f9cb200927c80b8e7595265b770e34"
 PDMD_REVISION = "c41575a27fe1e7d7dcc4630e6cc410130dcbba53"
 DMAD_REVISION = "1db9d50082f491fb5b2fbbee7499fb93e9190c51"
+H3_VAE_INT8_REVISION = "d8023be02fefbb3633b0cd335c3879f91177299d"
 
 
 def _hf(repo: str, revision: str, path: str) -> str:
@@ -39,6 +40,15 @@ def _hf(repo: str, revision: str, path: str) -> str:
 CATALOG = {
     item.artifact_id: item
     for item in [
+        ModelArtifact(
+            "h3.video-vae.int8-convrot", "h3-experimental", "video-vae", "vae",
+            "minimax_h3_video_vae_int8_convrot.safetensors",
+            _hf("Kijai/MiniMax-H3-experimental", H3_VAE_INT8_REVISION,
+                "minimax_h3_video_vae_int8_convrot.safetensors"),
+            3_171_670_912,
+            "9bb2d96f218c76babd85e0611b85ca8fb330a90546c01a0005e8a58a59593410",
+            H3_VAE_INT8_REVISION,
+        ),
         ModelArtifact(
             "h3.ref2va.turbo-8-v1-768p", "ref2va", "accelerator-lora", "loras",
             "minimax_h3_ref2v_turbo_8step_v1.0_768p_comfyui_bf16.safetensors",
