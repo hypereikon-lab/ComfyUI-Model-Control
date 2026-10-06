@@ -27,6 +27,9 @@ FUN_CONTROL_REVISION = "c79bdb788d0f77460c3952a4c1ae3b3b7d71a4c8"
 SAM3_REVISION = "f38cd62b71494b53ac2b56ca36e24f3c8d565581"
 DA3_REVISION = "248c0c2c1fca3cf3046db1d0d3d5256f2d078f41"
 SDPOSE_REVISION = "f122ac7976997885e3bfeab2bb3a537a6bc250bc"
+REF_TURBO8_REVISION = "0eebcc7e79f9cb200927c80b8e7595265b770e34"
+PDMD_REVISION = "c41575a27fe1e7d7dcc4630e6cc410130dcbba53"
+DMAD_REVISION = "1db9d50082f491fb5b2fbbee7499fb93e9190c51"
 
 
 def _hf(repo: str, revision: str, path: str) -> str:
@@ -36,6 +39,33 @@ def _hf(repo: str, revision: str, path: str) -> str:
 CATALOG = {
     item.artifact_id: item
     for item in [
+        ModelArtifact(
+            "h3.ref2va.turbo-8-v1-768p", "ref2va", "accelerator-lora", "loras",
+            "minimax_h3_ref2v_turbo_8step_v1.0_768p_comfyui_bf16.safetensors",
+            _hf("lightx2v/Minimax-h3-Turbo", REF_TURBO8_REVISION,
+                "minimax_h3_ref2v_turbo_8step_v1.0_768p_comfyui_bf16.safetensors"),
+            1_956_193_000,
+            "6a56f41ab4229c9dd845b9501bbd475ee57e112d846cf2e819d534a1ae928c5a",
+            REF_TURBO8_REVISION,
+        ),
+        ModelArtifact(
+            "h3.pdmd-4-rank57", "h3-experimental", "accelerator-lora", "loras",
+            "minimax_h3_pdmd_4step_lora_avg_rank_57_bf16.safetensors",
+            _hf("Kijai/MiniMax-H3-experimental", PDMD_REVISION,
+                "loras/minimax_h3_pdmd_4step_lora_avg_rank_57_bf16.safetensors"),
+            558_735_392,
+            "b5c62eb228a4f604890566ad698713703ed221302e0df1c067725c39f11efc37",
+            PDMD_REVISION,
+        ),
+        ModelArtifact(
+            "h3.dmad-4-rank39", "h3-experimental", "accelerator-lora", "loras",
+            "minimax_h3_DMAD_4step_full_lora_avg_rank_39_bf16.safetensors",
+            _hf("Kijai/MiniMax-H3-experimental", DMAD_REVISION,
+                "loras/minimax_h3_DMAD_4step_full_lora_avg_rank_39_bf16.safetensors"),
+            366_647_000,
+            "ddfdd94f4c9a0f32bf3649bb8e98ca20db572e4db6bcd9cca546a5b33ea32d11",
+            DMAD_REVISION,
+        ),
         ModelArtifact(
             "h3.fl2va.trunk.int8-convrot",
             "fl2va",
