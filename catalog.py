@@ -31,6 +31,7 @@ REF_TURBO8_REVISION = "0eebcc7e79f9cb200927c80b8e7595265b770e34"
 PDMD_REVISION = "c41575a27fe1e7d7dcc4630e6cc410130dcbba53"
 DMAD_REVISION = "1db9d50082f491fb5b2fbbee7499fb93e9190c51"
 H3_VAE_INT8_REVISION = "d8023be02fefbb3633b0cd335c3879f91177299d"
+FASTH3_TRIM_REVISION = "f66c13dc17391dd4da99242a407918b92bf7d5fc"
 
 
 def _hf(repo: str, revision: str, path: str) -> str:
@@ -40,6 +41,15 @@ def _hf(repo: str, revision: str, path: str) -> str:
 CATALOG = {
     item.artifact_id: item
     for item in [
+        ModelArtifact(
+            "h3.fasth3.trim-8.nvfp4", "t2av", "experimental-distilled-trunk", "diffusion_models",
+            "fastvideo_fasth3_trim_8step_nvfp4.safetensors",
+            _hf("FastVideo/FastVideo-FastH3-Trim-Comfy", FASTH3_TRIM_REVISION,
+                "diffusion_models/fastvideo_fasth3_trim_8step_nvfp4.safetensors"),
+            11_894_623_166,
+            "748b2bcc9c4b7bf7b23406987b42d4ac40362070c164cf11092482be6a863455",
+            FASTH3_TRIM_REVISION,
+        ),
         ModelArtifact(
             "h3.video-vae.int8-convrot", "h3-experimental", "video-vae", "vae",
             "minimax_h3_video_vae_int8_convrot.safetensors",
