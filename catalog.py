@@ -32,6 +32,9 @@ PDMD_REVISION = "c41575a27fe1e7d7dcc4630e6cc410130dcbba53"
 DMAD_REVISION = "1db9d50082f491fb5b2fbbee7499fb93e9190c51"
 H3_VAE_INT8_REVISION = "d8023be02fefbb3633b0cd335c3879f91177299d"
 FASTH3_TRIM_REVISION = "f66c13dc17391dd4da99242a407918b92bf7d5fc"
+FL2VA_TURBO_PREVIEW_REVISION = "587e806edadec7b92393556b3ac3115cadfb32be"
+FL2VA_TURBO_V13_REVISION = "30f485ed874aa44c8183348ad361c5eabad318da"
+PIKA_FLEX_REVISION = "3ff166447d5edb1406107ab8370c42000ce173e4"
 
 
 def _hf(repo: str, revision: str, path: str) -> str:
@@ -41,6 +44,33 @@ def _hf(repo: str, revision: str, path: str) -> str:
 CATALOG = {
     item.artifact_id: item
     for item in [
+        ModelArtifact(
+            "h3.fl2va.turbo-4-v01", "fl2va", "accelerator-lora", "loras",
+            "minimax_h3_fl2v_lightx2v_turbo_4step_v0.1_comfy.safetensors",
+            _hf("Kijai/MiniMax-H3_comfy", FL2VA_TURBO_PREVIEW_REVISION,
+                "loras/minimax_h3_fl2v_lightx2v_turbo_4step_v0.1_comfy.safetensors"),
+            1_956_171_984,
+            "fc9b6500f0331fe925b004738baaa31bd34104741c8bf9334816f9ac3005c8c1",
+            FL2VA_TURBO_PREVIEW_REVISION,
+        ),
+        ModelArtifact(
+            "h3.fl2va.turbo-4-v13", "fl2va", "accelerator-lora", "loras",
+            "minimax_h3_fl2v_turbo_4step_v1.3_768p_comfyui_bf16.safetensors",
+            _hf("lightx2v/Minimax-h3-Turbo", FL2VA_TURBO_V13_REVISION,
+                "minimax_h3_fl2v_turbo_4step_v1.3_768p_comfyui_bf16.safetensors"),
+            1_956_193_000,
+            "70103fd0d80a947ed4e7fe6f88915863d54ef22c5cab03bd5d2fd649385ffe1e",
+            FL2VA_TURBO_V13_REVISION,
+        ),
+        ModelArtifact(
+            "h3.fl2va.pika-flex", "fl2va", "post-trained-lora", "loras",
+            "pika_h3_flex_fl2va_comfy_bf16.safetensors",
+            _hf("Pika-Labs/Pika-H3-Flex", PIKA_FLEX_REVISION,
+                "comfy/loras/pika_h3_flex_fl2va_comfy_bf16.safetensors"),
+            1_956_172_176,
+            "68783e6447696ec365d13c0554941e070bee4cfea13c37da52498ec4f9a53f89",
+            PIKA_FLEX_REVISION,
+        ),
         ModelArtifact(
             "h3.fasth3.trim-8.nvfp4", "t2av", "experimental-distilled-trunk", "diffusion_models",
             "fastvideo_fasth3_trim_8step_nvfp4.safetensors",
