@@ -45,6 +45,15 @@ CATALOG = {
     item.artifact_id: item
     for item in [
         ModelArtifact(
+            "h3.ref2va.turbo-4-v10-768p", "ref2va", "accelerator-lora", "loras",
+            "minimax_h3_ref2v_turbo_4step_v1.0_768p_comfyui_bf16.safetensors",
+            _hf("lightx2v/Minimax-h3-Turbo", FL2VA_TURBO_OCTOBER_REVISION,
+                "minimax_h3_ref2v_turbo_4step_v1.0_768p_comfyui_bf16.safetensors"),
+            1_956_193_000,
+            "b4da466e43588004097dfbcde245ccc439c34a26bc997cb76a0b53a1d549ea0d",
+            FL2VA_TURBO_OCTOBER_REVISION,
+        ),
+        ModelArtifact(
             "h3.fl2va.turbo-4-v01", "fl2va", "accelerator-lora", "loras",
             "minimax_h3_fl2v_lightx2v_turbo_4step_v0.1_comfy.safetensors",
             _hf("Kijai/MiniMax-H3_comfy", FL2VA_TURBO_PREVIEW_REVISION,
