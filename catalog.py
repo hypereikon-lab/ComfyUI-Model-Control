@@ -45,6 +45,24 @@ CATALOG = {
     item.artifact_id: item
     for item in [
         ModelArtifact(
+            "h3.temporal.warm100-r16", "h3", "temporal-expansion-lora", "loras",
+            "minimax_h3_temporal_expansion_warm100_r16.safetensors",
+            _hf("MATLOWAI/MiniMax-H3-Motion-Adapter", "42cbd13e6e976fd31355cc8481798017bcba33cf",
+                "temporal_expansion/minimax_h3_temporal_expansion_warm100_r16.safetensors"),
+            63_103_768,
+            "cbb23ad43c15abaf8c5ef92489fcad2d5439b3e20dd0f2e58b07e966742bcbf8",
+            "42cbd13e6e976fd31355cc8481798017bcba33cf",
+        ),
+        ModelArtifact(
+            "h3.fl2va.pika-flex-v1", "fl2va", "post-trained-lora", "loras",
+            "pika_h3_flex_fl2va_v1_bf16.safetensors",
+            _hf("Comfy-Org/MiniMax-H3", "54472221d27c695fca9621b0c3ed52f06c4af707",
+                "loras/pika_h3_flex_fl2va_v1_bf16.safetensors"),
+            1_956_172_304,
+            "cc5453aeecd6189468409003fe4cf1b57e52ff3a830a0a154b87decbe07358b7",
+            "54472221d27c695fca9621b0c3ed52f06c4af707",
+        ),
+        ModelArtifact(
             "h3.ref2va.original-bf16-ptd", "ref2va", "original-base", "diffusion_models",
             "minimax_h3_ref2va_bf16.safetensors",
             _hf("Comfy-Org/MiniMax-H3", "54472221d27c695fca9621b0c3ed52f06c4af707",
