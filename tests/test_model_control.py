@@ -76,6 +76,18 @@ class ModelControlTests(unittest.TestCase):
         with self.assertRaisesRegex(ModelControlError, "allowlisted"):
             control.start_download("unknown", "0" * 64, "download:unknown")
 
+    def test_late_registered_category_and_added_roots(self):
+        registered = {}
+        control = ModelControl({}, folder_resolver=lambda name: registered[name])
+        with self.assertRaisesRegex(ModelControlError, "unavailable"):
+            control._targets(self.artifact)
+        registered["diffusion_models"] = [self.root]
+        self.assertEqual(control._targets(self.artifact), (self.root / self.artifact.filename,))
+        other = self.root / "second-root"
+        registered["diffusion_models"].append(other)
+        self.assertEqual(control._targets(self.artifact),
+                         (self.root / self.artifact.filename, other / self.artifact.filename))
+
     def test_download_is_verified_and_atomic(self):
         control = self.control()
         with patch.dict("model_control.CATALOG", {self.artifact.artifact_id: self.artifact}, clear=True):

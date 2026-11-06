@@ -39,7 +39,7 @@ class TaskState:
 
 
 class ModelControl:
-    VERSION = "1.1.1"
+    VERSION = "1.1.2"
     RESERVE_BYTES = 10 * 1024**3
     CHUNK_BYTES = 8 * 1024**2
 
@@ -49,6 +49,7 @@ class ModelControl:
         *,
         opener: Callable = urllib.request.urlopen,
         reserve_bytes: int | None = None,
+        folder_resolver: Callable | None = None,
     ):
         self.folder_roots: dict[str, tuple[Path, ...]] = {}
         for name, paths in folder_roots.items():
@@ -58,6 +59,7 @@ class ModelControl:
                 raise ModelControlError(f"folder category {name!r} has no roots")
             self.folder_roots[name] = resolved
         self.opener = opener
+        self.folder_resolver = folder_resolver
         self.reserve_bytes = self.RESERVE_BYTES if reserve_bytes is None else reserve_bytes
         self._lock = threading.RLock()
         self._tasks: dict[str, TaskState] = {}
@@ -67,14 +69,9 @@ class ModelControl:
     def for_comfy(cls) -> "ModelControl":
         import folder_paths
 
-        categories = {item.folder_category for item in CATALOG.values()}
-        roots: dict[str, tuple[Path, ...]] = {}
-        for category in categories:
-            paths = folder_paths.get_folder_paths(category)
-            if not paths:
-                raise ModelControlError(f"ComfyUI has no folder for {category!r}")
-            roots[category] = tuple(Path(path) for path in paths)
-        return cls(roots)
+        # Custom loaders can register categories after this extension imports.
+        # Resolve their registered roots at operation time, never invent a path.
+        return cls({}, folder_resolver=folder_paths.get_folder_paths)
 
     def capabilities(self) -> dict:
         return {
@@ -276,6 +273,15 @@ class ModelControl:
         return state
 
     def _targets(self, artifact: ModelArtifact) -> tuple[Path, ...]:
+        if self.folder_resolver is not None:
+            try:
+                paths = self.folder_resolver(artifact.folder_category)
+            except KeyError:
+                paths = ()
+            roots = tuple(dict.fromkeys(Path(path).resolve() for path in paths))
+            if not roots:
+                raise ModelControlError(f"folder category {artifact.folder_category!r} is unavailable")
+            self.folder_roots[artifact.folder_category] = roots
         roots = self.folder_roots.get(artifact.folder_category)
         if roots is None:
             raise ModelControlError(f"folder category {artifact.folder_category!r} is unavailable")
