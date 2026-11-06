@@ -45,6 +45,24 @@ CATALOG = {
     item.artifact_id: item
     for item in [
         ModelArtifact(
+            "h3.ref2va.original-bf16-ptd", "ref2va", "original-base", "diffusion_models",
+            "minimax_h3_ref2va_bf16.safetensors",
+            _hf("Comfy-Org/MiniMax-H3", "54472221d27c695fca9621b0c3ed52f06c4af707",
+                "diffusion_models/minimax_h3_ref2va_bf16.safetensors"),
+            66_280_487_368,
+            "e32c54c1a7b4f5f397f195cea267ccb18806303bb665678c4bee60953bdf3026",
+            "54472221d27c695fca9621b0c3ed52f06c4af707",
+        ),
+        ModelArtifact(
+            "h3.ref2va.ptd-refasymopd-8step", "ref2va", "ptd-adapter-bank", "ptd",
+            "MiniMax-H3-Ref2VA-PTD-RefAsymOPD-8Step.safetensors",
+            _hf("taobao-content-ai/MiniMax-H3-PTD-RefAsymOPD-LoRAs", "d1f88c89c352e7751b56b5f32c7b657fb3e0f2c5",
+                "MiniMax-H3-Ref2VA-PTD-RefAsymOPD-8Step.safetensors"),
+            11_112_893_024,
+            "6796802b9150110a3cd7f66891c9e6190502a432c30b0fa1aa299724cfc15cc3",
+            "d1f88c89c352e7751b56b5f32c7b657fb3e0f2c5",
+        ),
+        ModelArtifact(
             "h3.ref2va.turbo-4-v10-768p", "ref2va", "accelerator-lora", "loras",
             "minimax_h3_ref2v_turbo_4step_v1.0_768p_comfyui_bf16.safetensors",
             _hf("lightx2v/Minimax-h3-Turbo", FL2VA_TURBO_OCTOBER_REVISION,
