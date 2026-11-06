@@ -82,11 +82,11 @@ class ModelControlTests(unittest.TestCase):
         with self.assertRaisesRegex(ModelControlError, "unavailable"):
             control._targets(self.artifact)
         registered["diffusion_models"] = [self.root]
-        self.assertEqual(control._targets(self.artifact), (self.root / self.artifact.filename,))
+        self.assertEqual(control._targets(self.artifact), (self.root.resolve() / self.artifact.filename,))
         other = self.root / "second-root"
         registered["diffusion_models"].append(other)
         self.assertEqual(control._targets(self.artifact),
-                         (self.root / self.artifact.filename, other / self.artifact.filename))
+                         (self.root.resolve() / self.artifact.filename, other.resolve() / self.artifact.filename))
 
     def test_download_is_verified_and_atomic(self):
         control = self.control()
