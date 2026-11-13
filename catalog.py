@@ -45,6 +45,33 @@ CATALOG = {
     item.artifact_id: item
     for item in [
         ModelArtifact(
+            "geometry.moge3-vitl-fp16", "moge", "geometry-estimation", "geometry_estimation",
+            "moge_3_vitl_fp16.safetensors",
+            _hf("Comfy-Org/moge", "1484985258ba7ef45c314144fcf0e90924ffbf44",
+                "geometry_estimation/moge_3_vitl_fp16.safetensors"),
+            740_652_334,
+            "52ad9a13037a28fd65003cae7df056c8f903f5aed2c3a5c802be0f5c74a6a7b8",
+            "1484985258ba7ef45c314144fcf0e90924ffbf44",
+        ),
+        ModelArtifact(
+            "h3.ref2va.dmd-8step-turbo-pruned", "ref2va", "accelerator-lora", "loras",
+            "minimax_h3_dmd_ref2va_8step_turbo_pruned.safetensors",
+            _hf("drbaph/MiniMax-H3-Turbo-Lora-ComfyUI", "bb2bc497cbaca89dadd0bcf1856eed4f8275be20",
+                "experimental/minimax_h3_dmd_ref2va_8step_turbo_pruned.safetensors"),
+            2_285_989_092,
+            "693f41129785f31a820d32100b698cdcc42182c27c291f37f47d1ca5f38f5c20",
+            "bb2bc497cbaca89dadd0bcf1856eed4f8275be20",
+        ),
+        ModelArtifact(
+            "h3.ref2va.crossview-warp-v1-3500", "ref2va", "view-completion-lora", "loras",
+            "MiniMax-H3_Ref2VA-LoRA-CrossView-Warp_v1_3500.safetensors",
+            _hf("Cseti/MiniMax-H3_Ref2VA-LoRA-CrossView-Warp_v1", "94dc2a07c5a3f7e10b7c1d053cc700762d15c35d",
+                "MiniMax-H3_Ref2VA-LoRA-CrossView-Warp_v1_3500.safetensors"),
+            596_452_584,
+            "aab492964261f6611ced672c70866ce9d64bab66fbd28fd39d26bcd09c852f91",
+            "94dc2a07c5a3f7e10b7c1d053cc700762d15c35d",
+        ),
+        ModelArtifact(
             "h3.temporal.warm100-r16", "h3", "temporal-expansion-lora", "loras",
             "minimax_h3_temporal_expansion_warm100_r16.safetensors",
             _hf("MATLOWAI/MiniMax-H3-Motion-Adapter", "42cbd13e6e976fd31355cc8481798017bcba33cf",
