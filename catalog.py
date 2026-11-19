@@ -33,6 +33,7 @@ DMAD_REVISION = "1db9d50082f491fb5b2fbbee7499fb93e9190c51"
 H3_VAE_INT8_REVISION = "d8023be02fefbb3633b0cd335c3879f91177299d"
 FASTH3_TRIM_REVISION = "f66c13dc17391dd4da99242a407918b92bf7d5fc"
 FL2VA_TURBO_PREVIEW_REVISION = "587e806edadec7b92393556b3ac3115cadfb32be"
+FL2VA_TURBO8_PRUNED_REVISION = "c64ac4de8c5101af8a1b2057038d13fc1e72f950"
 FL2VA_TURBO_OCTOBER_REVISION = "30f485ed874aa44c8183348ad361c5eabad318da"
 PIKA_FLEX_REVISION = "3ff166447d5edb1406107ab8370c42000ce173e4"
 
@@ -142,6 +143,15 @@ CATALOG = {
             1_956_193_000,
             "fb4c00361c94bad47f878d5e096c6cab2f45063b0968bd5756dcb7da6936f53e",
             FL2VA_TURBO_OCTOBER_REVISION,
+        ),
+        ModelArtifact(
+            "h3.fl2va.turbo-8-v12-pruned", "fl2va", "accelerator-lora", "loras",
+            "minimax_h3_fl2v_turbo_8step_v1.2_768p_pruned_avg_rank_24_bf16.safetensors",
+            _hf("Kijai/MiniMax-H3_comfy", FL2VA_TURBO8_PRUNED_REVISION,
+                "loras/minimax_h3_fl2v_turbo_8step_v1.2_768p_pruned_avg_rank_24_bf16.safetensors"),
+            335_604_966,
+            "77f19effc5f42df09431a3041daf326a53fa5850ea8407d82f1c235933d394fb",
+            FL2VA_TURBO8_PRUNED_REVISION,
         ),
         ModelArtifact(
             "h3.fl2va.pika-flex", "fl2va", "post-trained-lora", "loras",
