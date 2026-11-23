@@ -28,6 +28,7 @@ SAM3_REVISION = "f38cd62b71494b53ac2b56ca36e24f3c8d565581"
 DA3_REVISION = "248c0c2c1fca3cf3046db1d0d3d5256f2d078f41"
 SDPOSE_REVISION = "f122ac7976997885e3bfeab2bb3a537a6bc250bc"
 REF_TURBO8_REVISION = "0eebcc7e79f9cb200927c80b8e7595265b770e34"
+REF_TURBO8_V11_REVISION = "30f485ed874aa44c8183348ad361c5eabad318da"
 PDMD_REVISION = "c41575a27fe1e7d7dcc4630e6cc410130dcbba53"
 DMAD_REVISION = "1db9d50082f491fb5b2fbbee7499fb93e9190c51"
 H3_VAE_INT8_REVISION = "d8023be02fefbb3633b0cd335c3879f91177299d"
@@ -188,6 +189,15 @@ CATALOG = {
             1_956_193_000,
             "6a56f41ab4229c9dd845b9501bbd475ee57e112d846cf2e819d534a1ae928c5a",
             REF_TURBO8_REVISION,
+        ),
+        ModelArtifact(
+            "h3.ref2va.turbo-8-v11-768p", "ref2va", "accelerator-lora", "loras",
+            "minimax_h3_ref2v_turbo_8step_v1.1_768p_comfyui_bf16.safetensors",
+            _hf("lightx2v/Minimax-h3-Turbo", REF_TURBO8_V11_REVISION,
+                "minimax_h3_ref2v_turbo_8step_v1.1_768p_comfyui_bf16.safetensors"),
+            1_956_193_000,
+            "e56863a7524e0300729cbb7b64cc8b548d90698c1abbf7d83898b0122fbe1e81",
+            REF_TURBO8_V11_REVISION,
         ),
         ModelArtifact(
             "h3.pdmd-4-rank57", "h3-experimental", "accelerator-lora", "loras",
